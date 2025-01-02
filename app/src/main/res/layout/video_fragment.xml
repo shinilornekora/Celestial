@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <Button
-        android:id="@+id/captureButton"
+        android:id="@+id/switchButton"
         android:layout_height="60dp"
         style="?android:attr/buttonBarButtonStyle"
         android:textColor="@color/design_default_color_primary"
@@ -30,10 +30,12 @@
 
     <include
         android:id="@+id/camera_container"
-        layout="@layout/camera_container" />
+        layout="@layout/camera_container"
+        android:layout_width="311dp"
+        android:layout_height="432dp" />
 
     <include
         android:id="@+id/video_footer"
-        layout="@layout/photo_footer" />
+        layout="@layout/footer_photo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/controls"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="@color/design_default_color_surface"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginBottom="60dp"
+        android:background="@color/black" />
+
+    <Button
+        android:id="@+id/captureButton"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/material_dynamic_neutral60"
+        android:text="@string/camera_photo_text"
+        android:textColor="@color/design_default_color_primary"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@color/black" />
+
+    <Button
+        android:id="@+id/settingsButton"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/material_dynamic_neutral60"
+        android:text="@string/go_to_gallery"
+        android:textColor="@color/design_default_color_primary"
+        android:textSize="16sp" />
+
+</LinearLayout>
