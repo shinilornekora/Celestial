@@ -18,7 +18,7 @@ class PhotoFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         log("onCreateView callback")
-        return super.onCreateView(inflater, container, savedInstanceState)
+        return inflater.inflate(R.layout.photo_fragment, container, false);
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

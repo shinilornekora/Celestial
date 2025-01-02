@@ -2,13 +2,12 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/photoFragment"
-    android:id="@+id/navgraph">
+    app:startDestination="@id/photoFragment">
 
     <fragment
         android:id="@+id/photoFragment"
         android:name="com.example.cameraproject.PhotoFragment"
-        tools:layout="@layout/photo_fragment" >
+        tools:layout="@layout/photo_fragment">
         <action
             android:id="@+id/action_photo_to_video"
             app:destination="@id/videoFragment" />
@@ -20,7 +19,7 @@
     <fragment
         android:id="@+id/videoFragment"
         android:name="com.example.cameraproject.VideoFragment"
-        tools:layout="@layout/photo_fragment" >
+        tools:layout="@layout/video_fragment">
         <action
             android:id="@+id/action_video_to_photo"
             app:destination="@id/photoFragment" />
@@ -32,10 +31,10 @@
     <fragment
         android:id="@+id/galleryFragment"
         android:name="com.example.cameraproject.GalleryFragment"
-        tools:layout="@layout/photo_fragment" >
+        tools:layout="@layout/gallery_fragment">
         <action
             android:id="@+id/action_gallery_to_photo"
-            app:destination="@id/videoFragment" />
+            app:destination="@id/photoFragment" />
         <action
             android:id="@+id/action_gallery_to_video"
             app:destination="@id/videoFragment" />
