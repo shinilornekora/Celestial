@@ -24,7 +24,7 @@
         android:layout_height="match_parent"
         android:background="@color/black"/>
     <Button
-        android:id="@+id/settingsButton"
+        android:id="@+id/galleryButton"
         style="?android:attr/buttonBarButtonStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
