@@ -1,36 +1,58 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <Button
         android:id="@+id/switchButton"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="60dp"
         style="?android:attr/buttonBarButtonStyle"
         android:textColor="@color/design_default_color_primary"
         android:background="@color/material_dynamic_neutral60"
         android:textSize="20sp"
-        android:text="@string/go_to_video"/>
+        android:text="@string/go_to_video"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <View
+        android:id="@+id/separatorView"
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="@color/black"/>
+        android:background="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/switchButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <include
         android:id="@+id/camera_container"
         layout="@layout/camera_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/separatorView"
+        app:layout_constraintBottom_toTopOf="@id/photo_footer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <View
+        android:id="@+id/separatorControlView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="4dp"
+        android:background="@color/black"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/photo_footer" />
 
     <include
         android:id="@+id/photo_footer"
         layout="@layout/footer_photo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-</LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
