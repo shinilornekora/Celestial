@@ -27,6 +27,7 @@ class PhotoFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var cameraManager: CameraManager
+    private lateinit var cameraDevice: CameraDevice
     private lateinit var cameraId: String
     private lateinit var textureView: TextureView
     private lateinit var imageReader: ImageReader
@@ -67,7 +68,9 @@ class PhotoFragment : Fragment() {
         }
 
         cameraManager.openCamera(cameraId, object : CameraDevice.StateCallback() {
+
             override fun onOpened(camera: CameraDevice) {
+                cameraDevice = camera
                 startPreview(camera)
             }
 
@@ -96,7 +99,7 @@ class PhotoFragment : Fragment() {
             }
 
             override fun onConfigureFailed(session: CameraCaptureSession) {
-                Log.e("[PHOTO]", "Configuration failed")
+                log("Configuration failed")
             }
         }, null)
 
@@ -148,6 +151,8 @@ class PhotoFragment : Fragment() {
 
         val walker = findNavController()
 
+        checkPermissions()
+
         binding.switchButton.setOnClickListener {
             log("Clicked on switcher")
             walker.navigate(R.id.action_photo_to_video)
@@ -155,12 +160,60 @@ class PhotoFragment : Fragment() {
 
         binding.photoFooter.captureButton.setOnClickListener {
             log("Clicked on action button")
-            checkPermissions()
+            takePhoto()
         }
 
         binding.photoFooter.galleryButton.setOnClickListener {
             log("Clicked on gallery button")
             walker.navigate(R.id.action_photo_to_gallery)
+        }
+    }
+
+    private fun takePhoto() {
+        if (cameraDevice == null) {
+            log("Camera device is not available")
+            return
+        }
+
+        try {
+            val captureRequestBuilder = cameraDevice?.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
+            val imageReader = imageReader
+
+            captureRequestBuilder?.addTarget(imageReader.surface)
+
+            val rotation = requireActivity().windowManager.defaultDisplay.rotation
+            captureRequestBuilder?.set(CaptureRequest.JPEG_ORIENTATION, getOrientation(rotation))
+
+            cameraDevice.createCaptureSession(listOf(imageReader.surface), object : CameraCaptureSession.StateCallback() {
+                override fun onConfigured(session: CameraCaptureSession) {
+                    try {
+                        session.capture(captureRequestBuilder!!.build(), object : CameraCaptureSession.CaptureCallback() {
+                            override fun onCaptureCompleted(session: CameraCaptureSession, request: CaptureRequest, result: TotalCaptureResult) {
+                                super.onCaptureCompleted(session, request, result)
+                                log("Image captured")
+                            }
+                        }, null)
+                    } catch (e: CameraAccessException) {
+                        log("Camera access exception: ${e.message}")
+                    }
+                }
+
+                override fun onConfigureFailed(session: CameraCaptureSession) {
+                    log("Camera configuration failed")
+                }
+            }, null)
+        } catch (e: CameraAccessException) {
+            log("Camera access exception: ${e.message}")
+        }
+    }
+
+    private fun getOrientation(rotation: Int): Int {
+        return when (rotation) {
+            Surface.ROTATION_0 -> 90
+            Surface.ROTATION_90 -> 0
+            Surface.ROTATION_180 -> 270
+            Surface.ROTATION_270 -> 180
+            else -> 90
         }
     }
 
