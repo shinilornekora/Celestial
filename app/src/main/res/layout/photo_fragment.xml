@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <Button
         android:id="@+id/switchButton"
         android:layout_width="0dp"
@@ -16,6 +17,18 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageView
+        android:id="@+id/camera_switcher"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/monbo"
+        android:elevation="10dp"
+        android:contentDescription="Just an animal."
+        app:layout_constraintTop_toBottomOf="@id/separatorView"
+        app:layout_constraintStart_toStartOf="@id/separatorView"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp" />
 
     <View
         android:id="@+id/separatorView"

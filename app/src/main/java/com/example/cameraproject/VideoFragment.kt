@@ -21,6 +21,7 @@ class VideoFragment : Fragment() {
 
     private lateinit var cameraHelper: CameraHelper
     private var isRecordingVideo = false
+    private var isMirrored = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,6 +46,12 @@ class VideoFragment : Fragment() {
             binding.cameraContainer.textureView
         ) { savedFile ->
             Log.d("VIDEO",  "сохранил видео в: ${savedFile.absolutePath}")
+        }
+
+        binding.cameraSwitcher.setOnClickListener {
+            cameraHelper.switchCamera()
+            it.scaleX = if (isMirrored) 1f else -1f
+            isMirrored = !isMirrored
         }
     }
 
@@ -79,7 +86,7 @@ class VideoFragment : Fragment() {
     }
 
     private fun startVideoRecording() {
-        val videoFile = File(requireContext().getExternalFilesDir(null), "video.mp4")
+        val videoFile = File(requireContext().getExternalFilesDir(null), "video_${System.currentTimeMillis()}.mp4")
         cameraHelper.startVideoRecording(videoFile)
         isRecordingVideo = true
         binding.videoFooter.captureButton.text = "Stop"

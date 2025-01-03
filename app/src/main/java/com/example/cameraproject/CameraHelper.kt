@@ -37,7 +37,9 @@ class CameraHelper(
     private var cameraCaptureSession: CameraCaptureSession? = null
     private var mediaRecorder: MediaRecorder? = null
     private var isRecording = false
+    private var currentStaticFileName = ""
     private val logTag = "[CameraHelper]"
+    private var isFrontCamera = false
 
     private fun log(message: String) {
         Log.d(logTag, message)
@@ -74,6 +76,8 @@ class CameraHelper(
             prepare()
         }
 
+        currentStaticFileName = outputFile.absolutePath
+
         cameraDevice?.let { camera ->
             val surfaceTexture = textureView.surfaceTexture ?: return
             surfaceTexture.setDefaultBufferSize(textureView.width, textureView.height)
@@ -106,9 +110,15 @@ class CameraHelper(
         }
     }
 
+    fun switchCamera() {
+        isFrontCamera = !isFrontCamera
+        releaseResources() // Освобождаем ресурсы текущей камеры
+        openCamera() // Открываем новую камеру
+    }
+
     fun stopVideoRecording() {
         if (!isRecording) {
-            log("Съемка не ведется, ты хитрый хакеридзе")
+            log("Съемка не ведется.")
             return
         }
 
@@ -122,7 +132,7 @@ class CameraHelper(
         isRecording = false
         startPreview()
 
-        log("Успешно закончили запись")
+        log("Запись завершена. Видео сохранено в: $currentStaticFileName")
     }
 
     fun openCamera() {
@@ -133,7 +143,13 @@ class CameraHelper(
             return
         }
 
-        cameraId = cameraManager.cameraIdList.firstOrNull() ?: return log("На устройстве камеры похоже нет.")
+        cameraId = cameraManager.cameraIdList.firstOrNull { id ->
+            val characteristics = cameraManager.getCameraCharacteristics(id)
+            val facing = characteristics.get(CameraCharacteristics.LENS_FACING)
+            if (isFrontCamera) facing == CameraCharacteristics.LENS_FACING_FRONT
+            else facing == CameraCharacteristics.LENS_FACING_BACK
+        } ?: return log("Камера не найдена.")
+
         val characteristics = cameraManager.getCameraCharacteristics(cameraId)
         val streamConfigMap = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
         val previewSize = streamConfigMap?.getOutputSizes(SurfaceTexture::class.java)?.firstOrNull()
@@ -148,7 +164,7 @@ class CameraHelper(
             override fun onOpened(camera: CameraDevice) {
                 cameraDevice = camera
                 startPreview()
-                log("Открыл камеру")
+                log("Камера открыта: ${if (isFrontCamera) "фронтальная" else "задняя"}")
             }
 
             override fun onDisconnected(camera: CameraDevice) {
@@ -221,7 +237,7 @@ class CameraHelper(
     }
 
     private fun saveImage(image: Image) {
-        val currentTS = generateUniqueKey()
+        val currentTS = generateUniqueKey().take(10)
         val file = File(context.getExternalFilesDir(null), ("$currentTS.jpg"))
         val buffer = image.planes.first().buffer
         val bytes = ByteArray(buffer.remaining())

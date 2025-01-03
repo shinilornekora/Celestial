@@ -19,6 +19,7 @@ class PhotoFragment : Fragment() {
     private var _binding: PhotoFragmentBinding? = null
     private val binding get() = _binding!!
     private lateinit var cameraHelper: CameraHelper
+    private var isMirrored = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = PhotoFragmentBinding.inflate(inflater, container, false)
@@ -29,7 +30,7 @@ class PhotoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         cameraHelper = CameraHelper(requireContext(), binding.cameraContainer.textureView) { file ->
-            Log.d("[PHOTO]", "Photo saved: ${file.absolutePath}")
+            Log.d("[PHOTO]", "Сохранили сюда - ${file.absolutePath}")
         }
 
         checkPermissions()
@@ -55,6 +56,12 @@ class PhotoFragment : Fragment() {
 
         binding.switchButton.setOnClickListener {
             findNavController().navigate(R.id.action_photo_to_video)
+        }
+
+        binding.cameraSwitcher.setOnClickListener {
+            cameraHelper.switchCamera()
+            it.scaleX = if (isMirrored) 1f else -1f
+            isMirrored = !isMirrored
         }
     }
 

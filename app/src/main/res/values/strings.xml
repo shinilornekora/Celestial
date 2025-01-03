@@ -5,7 +5,7 @@
     <string name="camera_error">Error initializing camera</string>
     <string name="camera_photo_text">Take a shot!</string>
     <string name="camera_video_start_text">Start recording!</string>
-    <string name="camera_video_in_process_text">Start recording!</string>
+    <string name="camera_video_in_process_text">Stop recording!</string>
     <string name="camera_video_end_text">Wait a little, camera saving your content</string>
     <string name="go_to_gallery">Gallery</string>
     <string name="go_to_video">Switch to video</string>

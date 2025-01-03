@@ -1,24 +1,38 @@
-package com.example.cameraproject
-
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.cameraproject.R
 import java.io.File
 
 class MediaAdapter(
     private val mediaFiles: List<File>,
-    private val onItemClick: (File) -> Unit
+    private val onItemClick: (File) -> Unit,
+    private val onDoubleClick: (File) -> Unit
 ) : RecyclerView.Adapter<MediaAdapter.MediaViewHolder>() {
 
     inner class MediaViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val thumbnail: ImageView = view.findViewById(R.id.thumbnail)
 
+        private val gestureDetector = GestureDetector(view.context, object : GestureDetector.SimpleOnGestureListener() {
+            override fun onDoubleTap(e: MotionEvent): Boolean {
+                onDoubleClick(mediaFiles[adapterPosition])
+                return super.onDoubleTap(e)
+            }
+        })
+
         init {
             view.setOnClickListener {
                 onItemClick(mediaFiles[adapterPosition])
+            }
+
+            view.setOnTouchListener { v, event ->
+                gestureDetector.onTouchEvent(event)
+                false
             }
         }
     }
